@@ -35,7 +35,7 @@ class Juego(BaseModel):
     posicion_final: tuple | None
 
     def convertir_laberinto(self,laberinto) -> None:
-        self.mapa = [list(fila) for fila in self.laberinto.split("\n")]
+        self.mapa = [list(fila.strip()) for fila in self.laberinto.split("\n")]
 
     def limpiar_pantalla(self) -> None:
         os.system('cls' if os.name == 'nt' else 'clear')
@@ -68,7 +68,6 @@ class Juego(BaseModel):
 class JuegoArchivo():
     def __init__(self):
         laberinto = self.leer_archivo()
-        
         self.juego = Juego(posicion_inicial=(0,0),laberinto=laberinto,mapa=None,posicion_final = None)
     
     def leer_archivo(self) -> str:
@@ -103,7 +102,7 @@ class JuegoArchivo():
                     laberinto = archivo.read()
             else:
                 raise NotFileError("No hay archivos en la carpeta mapas, se cargara elmapa por defecto")
-        return laberinto
+        return laberinto.strip()
     
     def iniciar_juego(self):
         self.juego.convertir_laberinto(self.juego.laberinto)
